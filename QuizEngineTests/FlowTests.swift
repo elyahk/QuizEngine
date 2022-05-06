@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 
 protocol Router {
-    func routeTo(question: String)
+    func routeTo(question: String, answerCallback: @escaping (String) -> Void)
 }
 
 class Flow {
@@ -23,7 +23,12 @@ class Flow {
 
     func start() {
         if let firstQuestion = questions.first {
-            router.routeTo(question: firstQuestion)
+            router.routeTo(question: firstQuestion) { [weak self] _ in
+                guard let self = self else { return }
+                let firstQuestionIndex = self.questions.firstIndex(of: firstQuestion)!
+                let nextQuestion = self.questions[firstQuestionIndex+1]
+                self.router.routeTo(question: nextQuestion) { _ in }
+            }
         }
     }
 }
@@ -65,7 +70,7 @@ class FlowTests: XCTestCase {
         XCTAssertEqual(router.routedQuestions, ["Q1"])
     }
 
-    func test_startTwice_withTwoQuestion_routesToFirstQuestion() {
+    func test_startTwice_withTwoQuestion_routesToFirstQuestionTwice() {
         let router = RouterSpy()
         let sut = Flow(questions: ["Q1", "Q2"], router: router)
 
@@ -75,15 +80,23 @@ class FlowTests: XCTestCase {
         XCTAssertEqual(router.routedQuestions, ["Q1", "Q1"])
     }
 
-    class RouterSpy: Router {
-        var routedQuestionCount: Int = 0
-        var routedQuestion: String = ""
-        var routedQuestions: [String] = []
+    func test_startAndAnswerFirstQuestion_withTwoQuestion_routesToSecondQuestion() {
+        let router = RouterSpy()
+        let sut = Flow(questions: ["Q1", "Q2"], router: router)
 
-        func routeTo(question: String) {
-            routedQuestionCount += 1
-            routedQuestion = question
+        sut.start()
+        router.answerCallback("A1")
+
+        XCTAssertEqual(router.routedQuestions, ["Q1", "Q2"])
+    }
+
+    class RouterSpy: Router {
+        var routedQuestions: [String] = []
+        var answerCallback: ((String) -> Void) = { _ in }
+
+        func routeTo(question: String, answerCallback: @escaping (String) -> Void) {
             routedQuestions.append(question)
+            self.answerCallback = answerCallback
         }
     }
 }
