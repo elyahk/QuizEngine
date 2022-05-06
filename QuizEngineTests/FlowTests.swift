@@ -13,33 +13,45 @@ protocol Router {
 }
 
 class Flow {
+    let questions: [String]
     let router: Router
 
-    init(router: Router) {
+    init(questions: [String], router: Router) {
+        self.questions = questions
         self.router = router
     }
 
     func start() {
-
+        if let question = questions.first {
+            router.routeTo(question: question)
+        }
     }
-
 }
 
 class FlowTests: XCTestCase {
     func test_start_withNoQuestions_doesNotRouteToQuestion() {
         let router = RouterSpy()
-        let sut = Flow(router: router)
+        let sut = Flow(questions: [], router: router)
 
         sut.start()
 
         XCTAssertEqual(router.routedQuestionCount, 0)
     }
 
+    func test_start_OneQuestions_routesToQuestion() {
+        let router = RouterSpy()
+        let sut = Flow(questions: ["Q1"], router: router)
+
+        sut.start()
+
+        XCTAssertEqual(router.routedQuestionCount, 1)
+    }
+
     class RouterSpy: Router {
         var routedQuestionCount: Int = 0
 
         func routeTo(question: String) {
-
+            routedQuestionCount += 1
         }
     }
 }
