@@ -20,6 +20,7 @@ class Flow {
         self.questions = questions
         self.router = router
     }
+    
 
     func start() {
         if let firstQuestion = questions.first {
