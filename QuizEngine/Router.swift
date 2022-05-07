@@ -6,7 +6,3 @@
 //
 
 import Foundation
-
-protocol Router {
-    func routeTo(question: String, answerCallback: @escaping (String) -> Void)
-}
