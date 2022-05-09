@@ -8,14 +8,20 @@
 import Foundation
 
 protocol Router {
-    func routeTo(question: String, answerCallback: @escaping (String) -> Void)
+    associatedtype Question: Hashable
+    associatedtype Answer
+
+    typealias AnswerCallback = (Answer) -> Void
+    func routeTo(question: Question, answerCallback: @escaping AnswerCallback)
+    func routeTo(result: [Question: Answer])
 }
 
-class Flow {
-    let questions: [String]
-    let router: Router
+class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer == Answer {
+    private let questions: [Question]
+    private let router: R
+    private lazy var result: [Question: Answer] = [:]
 
-    init(questions: [String], router: Router) {
+    init(questions: [Question], router: R) {
         self.questions = questions
         self.router = router
     }
@@ -23,18 +29,26 @@ class Flow {
     func start() {
         if let firstQuestion = questions.first {
             router.routeTo(question: firstQuestion, answerCallback: routeNext(from: firstQuestion))
+        } else {
+            router.routeTo(result: [:])
         }
     }
 
-    func routeNext(from question: String) -> (String) -> Void {
-        return { [weak self] _ in
-            guard let self = self else { return }
+    private func routeNext(from question: Question) -> R.AnswerCallback {
+        return { [weak self] in self?.routeNext(question, answer: $0)
+        }
+    }
 
-            if let currentQuestionIndex = self.questions.firstIndex(of: question) {
-                if currentQuestionIndex < self.questions.count - 1 {
-                    let nextQuestion = self.questions[currentQuestionIndex+1]
-                    self.router.routeTo(question: nextQuestion, answerCallback: self.routeNext(from: nextQuestion))
-                }
+    private func routeNext(_ question: Question, answer: Answer) {
+        if let currentQuestionIndex = questions.firstIndex(of: question) {
+            result[question] = answer
+            let nextQuestionIndex = currentQuestionIndex+1
+
+            if nextQuestionIndex < questions.count {
+                let nextQuestion = questions[nextQuestionIndex]
+                router.routeTo(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
+            } else {
+                router.routeTo(result: result)
             }
         }
     }
