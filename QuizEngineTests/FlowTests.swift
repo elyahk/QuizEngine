@@ -110,7 +110,7 @@ class FlowTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(questions: [String]) -> Flow {
+    private func makeSUT(questions: [String]) -> Flow<String, String, RouterSpy> {
         return Flow(questions: questions, router: router)
     }
 
