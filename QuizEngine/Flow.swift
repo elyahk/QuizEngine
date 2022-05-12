@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Router {
+public protocol Router {
     associatedtype Question: Hashable
     associatedtype Answer
 
@@ -17,8 +17,8 @@ protocol Router {
 }
 
 public struct Result<Question: Hashable, Answer> {
-    let answers: [Question: Answer]
-    let score: Int
+    public let answers: [Question: Answer]
+    public let score: Int
 }
 
 class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer == Answer {
