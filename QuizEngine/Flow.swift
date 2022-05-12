@@ -13,13 +13,17 @@ protocol Router {
 
     typealias AnswerCallback = (Answer) -> Void
     func routeTo(question: Question, answerCallback: @escaping AnswerCallback)
-    func routeTo(result: [Question: Answer])
+    func routeTo(result: Result<Question, Answer>)
+}
+
+public struct Result<Question: Hashable, Answer> {
+    let answers: [Question: Answer]
 }
 
 class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer == Answer {
     private let questions: [Question]
     private let router: R
-    private lazy var result: [Question: Answer] = [:]
+    private lazy var answers: [Question: Answer] = [:]
 
     init(questions: [Question], router: R) {
         self.questions = questions
@@ -30,7 +34,7 @@ class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer 
         if let firstQuestion = questions.first {
             router.routeTo(question: firstQuestion, answerCallback: routeNext(from: firstQuestion))
         } else {
-            router.routeTo(result: [:])
+            router.routeTo(result: Result(answers: [:]))
         }
     }
 
@@ -41,14 +45,14 @@ class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer 
 
     private func routeNext(_ question: Question, answer: Answer) {
         if let currentQuestionIndex = questions.firstIndex(of: question) {
-            result[question] = answer
+            answers[question] = answer
             let nextQuestionIndex = currentQuestionIndex+1
 
             if nextQuestionIndex < questions.count {
                 let nextQuestion = questions[nextQuestionIndex]
                 router.routeTo(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
             } else {
-                router.routeTo(result: result)
+                router.routeTo(result: Result(answers: answers))
             }
         }
     }
