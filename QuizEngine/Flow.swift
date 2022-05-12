@@ -34,7 +34,7 @@ class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer 
         if let firstQuestion = questions.first {
             router.routeTo(question: firstQuestion, answerCallback: routeNext(from: firstQuestion))
         } else {
-            router.routeTo(result: Result(answers: [:]))
+            router.routeTo(result: result())
         }
     }
 
@@ -52,8 +52,12 @@ class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer 
                 let nextQuestion = questions[nextQuestionIndex]
                 router.routeTo(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
             } else {
-                router.routeTo(result: Result(answers: answers))
+                router.routeTo(result: result())
             }
         }
+    }
+
+    private func result() -> Result<Question, Answer> {
+        Result(answers: answers)
     }
 }
