@@ -18,16 +18,19 @@ protocol Router {
 
 public struct Result<Question: Hashable, Answer> {
     let answers: [Question: Answer]
+    let score: Int
 }
 
 class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer == Answer {
     private let questions: [Question]
     private let router: R
+    private let scoring: (([Question: Answer]) -> Int)
     private lazy var answers: [Question: Answer] = [:]
 
-    init(questions: [Question], router: R) {
+    init(questions: [Question], router: R, scoring: @escaping ([Question: Answer]) -> Int) {
         self.questions = questions
         self.router = router
+        self.scoring = scoring
     }
 
     func start() {
@@ -58,6 +61,6 @@ class Flow <Question, Answer, R: Router> where R.Question == Question, R.Answer 
     }
 
     private func result() -> Result<Question, Answer> {
-        Result(answers: answers)
+        Result(answers: answers, score: scoring(answers))
     }
 }
