@@ -16,7 +16,3 @@ public protocol Router {
     func routeTo(result: Result<Question, Answer>)
 }
 
-public struct Result<Question: Hashable, Answer> {
-    public let answers: [Question: Answer]
-    public let score: Int
-}
