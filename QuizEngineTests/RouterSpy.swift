@@ -20,4 +20,4 @@ public class RouterSpy: Router {
     public func routeTo(result: Result<String, String>) {
         routedResult = result
     }
-    }
+}
