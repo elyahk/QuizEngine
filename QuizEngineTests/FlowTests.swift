@@ -12,31 +12,31 @@ import XCTest
 class FlowTests: XCTestCase {
     private let delegate = DelegateSpy()
 
-    func test_start_withNoQuestions_doesNotRouteToQuestion() {
+    func test_start_withNoQuestions_doesNotDelegateQuestionHandling() {
         makeSUT(questions: []).start()
 
         XCTAssertTrue(delegate.handledQuestions.isEmpty)
     }
 
-    func test_start_withOneQuestion_routesToCorrectQuestion() {
+    func test_start_withOneQuestion_delegateCorrectQuestionHandling() {
         makeSUT(questions: ["Q1"]).start()
 
         XCTAssertEqual(delegate.handledQuestions, ["Q1"])
     }
 
-    func test_start_withOneQuestion_routesToCorrectQuestion_2() {
+    func test_start_withOneQuestion_delegateCorrectQuestion_2Handling() {
         makeSUT(questions: ["Q2"]).start()
 
         XCTAssertEqual(delegate.handledQuestions, ["Q2"])
     }
 
-    func test_start_withTwoQuestion_routesToFirstQuestion() {
+    func test_start_withTwoQuestion_delegateFirstQuestionHandling() {
         makeSUT(questions: ["Q1", "Q2"]).start()
 
         XCTAssertEqual(delegate.handledQuestions, ["Q1"])
     }
 
-    func test_startTwice_withTwoQuestion_routesToFirstQuestionTwice() {
+    func test_startTwice_withTwoQuestion_delegateFirstQuestionTwiceHandling() {
         let sut = makeSUT(questions: ["Q1", "Q2"])
 
         sut.start()
@@ -45,7 +45,7 @@ class FlowTests: XCTestCase {
         XCTAssertEqual(delegate.handledQuestions, ["Q1", "Q1"])
     }
 
-    func test_startAndAnswerFirstAndSecondQuestion_withThreeQuestion_routesToSecondAndThirdQuestion() {
+    func test_startAndAnswerFirstAndSecondQuestion_withThreeQuestion_delegateSecondAndThirdQuestionHandling() {
         let sut = makeSUT(questions: ["Q1", "Q2", "Q3"])
         sut.start()
 
@@ -55,7 +55,7 @@ class FlowTests: XCTestCase {
         XCTAssertEqual(delegate.handledQuestions, ["Q1", "Q2", "Q3"])
     }
 
-    func test_startAndAnswerFirstQuestion_withOneQuestion_doesNotRouteToAnotherQuestion() {
+    func test_startAndAnswerFirstQuestion_withOneQuestion_doesNotDelegateAnotherQuestionHandling() {
         let sut = makeSUT(questions: ["Q1"])
 
         sut.start()
