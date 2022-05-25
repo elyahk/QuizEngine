@@ -137,7 +137,7 @@ class FlowTests: XCTestCase {
         questions: [String],
         scoring: @escaping ([String: String]) -> Int = { _ in 0 }
     ) -> Flow<DelegateSpy> {
-        return Flow(questions: questions, router: delegate, scoring: scoring)
+        return Flow(questions: questions, delegate: delegate, scoring: scoring)
     }
 
     private class DelegateSpy: Router, QuizDelegate {
