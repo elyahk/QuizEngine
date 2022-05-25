@@ -22,3 +22,8 @@ public final class Quiz {
     }
 }
 
+func scoring<Question: Hashable, Answer: Equatable>(_ answers: [Question: Answer], correctAnswers: [Question: Answer]) -> Int {
+    return answers.reduce(0) { score, tupple in
+        return score + (correctAnswers[tupple.key] == tupple.value ? 1 : 0)
+    }
+}
