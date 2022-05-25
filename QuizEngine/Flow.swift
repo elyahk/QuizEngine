@@ -39,7 +39,7 @@ class Flow <Delegate: QuizDelegate> {
         delegateQuestionHandling(at: questions.index(after: index))
     }
 
-    private func answer(for question: Question, at index: Int) -> Delegate.AnswerCallback {
+    private func answer(for question: Question, at index: Int) -> Delegate.AnswerComletion {
         return { [weak self] answer in
             self?.answers[question] = answer
             self?.delegateQuestionHandling(after: index)
