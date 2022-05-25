@@ -15,6 +15,7 @@
 		2C22062D2830A8840034FAED /* FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5878E12824D7A90056E607 /* FlowTests.swift */; };
 		2C2206402830AD630034FAED /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C22063F2830AD630034FAED /* Result.swift */; };
 		2C2206412830AEAD0034FAED /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C22063F2830AD630034FAED /* Result.swift */; };
+		2C254674283DDC2400F6DB63 /* QuizDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C254673283DDC2400F6DB63 /* QuizDelegate.swift */; };
 		2C25E854282647F300A34181 /* Flow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C25E853282647F300A34181 /* Flow.swift */; };
 		2C25E8562826480100A34181 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C25E8552826480100A34181 /* Router.swift */; };
 		2C5878CC2824D5FD0056E607 /* QuizEngine.docc in Sources */ = {isa = PBXBuildFile; fileRef = 2C5878CB2824D5FD0056E607 /* QuizEngine.docc */; };
@@ -49,6 +50,7 @@
 		2C2206142830A8450034FAED /* QuizEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuizEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C22061B2830A8460034FAED /* QuizEngineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuizEngineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C22063F2830AD630034FAED /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		2C254673283DDC2400F6DB63 /* QuizDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizDelegate.swift; sourceTree = "<group>"; };
 		2C25E853282647F300A34181 /* Flow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow.swift; sourceTree = "<group>"; };
 		2C25E8552826480100A34181 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		2C5878C72824D5FD0056E607 /* QuizEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuizEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +125,7 @@
 				2C5878CB2824D5FD0056E607 /* QuizEngine.docc */,
 				2C25E853282647F300A34181 /* Flow.swift */,
 				2C25E8552826480100A34181 /* Router.swift */,
+				2C254673283DDC2400F6DB63 /* QuizDelegate.swift */,
 				2C22063F2830AD630034FAED /* Result.swift */,
 			);
 			path = QuizEngine;
@@ -335,6 +338,7 @@
 			files = (
 				2C5878CC2824D5FD0056E607 /* QuizEngine.docc in Sources */,
 				2C2206402830AD630034FAED /* Result.swift in Sources */,
+				2C254674283DDC2400F6DB63 /* QuizDelegate.swift in Sources */,
 				2CBD490F282CBDDC00CDD9CD /* DeprecatedGame.swift in Sources */,
 				2C762410283922FD00D6F1BD /* Question.swift in Sources */,
 				2C25E8562826480100A34181 /* Router.swift in Sources */,
