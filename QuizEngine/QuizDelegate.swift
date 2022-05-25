@@ -12,6 +12,6 @@ public protocol QuizDelegate {
     associatedtype Answer
 
     typealias AnswerCallback = (Answer) -> Void
-    func handle(question: Question, answerCallback: @escaping AnswerCallback)
+    func answer(for question: Question, completion: @escaping AnswerCallback)
     func handle(result: Result<Question, Answer>)
 }
