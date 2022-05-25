@@ -13,5 +13,13 @@ public protocol QuizDelegate {
     typealias AnswerComletion = (Answer) -> Void
 
     func answer(for question: Question, completion: @escaping AnswerComletion)
+
+    func didCompleteQuiz(withAnswers: [(question: Question, answer: Answer)])
+
+    @available(*, deprecated, message: "Use didCompleteQuiz(withAnswers:) API instead")
     func handle(result: Result<Question, Answer>)
+}
+
+public extension QuizDelegate {
+    func didCompleteQuiz(withAnswers: [(question: Question, answer: Answer)]) { }
 }
