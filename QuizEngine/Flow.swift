@@ -7,30 +7,35 @@
 
 import Foundation
 
-class Flow <R: QuizDelegate> {
-    typealias Question = R.Question
-    typealias Answer = R.Answer
+class Flow <Delegate: QuizDelegate> {
+    typealias Question = Delegate.Question
+    typealias Answer = Delegate.Answer
 
     private let questions: [Question]
-    private let router: R
+    private let delegate: Delegate
     private let scoring: (([Question: Answer]) -> Int)
     private lazy var answers: [Question: Answer] = [:]
 
-    init(questions: [Question], router: R, scoring: @escaping ([Question: Answer]) -> Int) {
+    init(questions: [Question], router: Delegate, scoring: @escaping ([Question: Answer]) -> Int) {
         self.questions = questions
-        self.router = router
+        self.delegate = router
         self.scoring = scoring
     }
 
     func start() {
-        if let firstQuestion = questions.first {
-            router.handle(question: firstQuestion, answerCallback: routeNext(from: firstQuestion))
+        routeToQuestion(at: questions.startIndex)
+    }
+
+    private func routeToQuestion(at index: Int) {
+        if index < questions.endIndex {
+            let question = questions[index]
+            delegate.handle(question: question, answerCallback: routeNext(from: question))
         } else {
-            router.handle(result: result())
+            delegate.handle(result: result())
         }
     }
 
-    private func routeNext(from question: Question) -> R.AnswerCallback {
+    private func routeNext(from question: Question) -> Delegate.AnswerCallback {
         return { [weak self] in self?.routeNext(question, answer: $0)
         }
     }
@@ -42,9 +47,9 @@ class Flow <R: QuizDelegate> {
 
             if nextQuestionIndex < questions.count {
                 let nextQuestion = questions[nextQuestionIndex]
-                router.handle(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
+                delegate.handle(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
             } else {
-                router.handle(result: result())
+                delegate.handle(result: result())
             }
         }
     }
