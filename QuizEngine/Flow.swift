@@ -29,28 +29,20 @@ class Flow <Delegate: QuizDelegate> {
     private func routeToQuestion(at index: Int) {
         if index < questions.endIndex {
             let question = questions[index]
-            delegate.handle(question: question, answerCallback: routeNext(from: question))
+            delegate.handle(question: question, answerCallback: callback(for: question, at: index))
         } else {
             delegate.handle(result: result())
         }
     }
 
-    private func routeNext(from question: Question) -> Delegate.AnswerCallback {
-        return { [weak self] in self?.routeNext(question, answer: $0)
-        }
+    private func routeToQuestion(after index: Int) {
+        routeToQuestion(at: questions.index(after: index))
     }
 
-    private func routeNext(_ question: Question, answer: Answer) {
-        if let currentQuestionIndex = questions.firstIndex(of: question) {
-            answers[question] = answer
-            let nextQuestionIndex = currentQuestionIndex+1
-
-            if nextQuestionIndex < questions.count {
-                let nextQuestion = questions[nextQuestionIndex]
-                delegate.handle(question: nextQuestion, answerCallback: routeNext(from: nextQuestion))
-            } else {
-                delegate.handle(result: result())
-            }
+    private func callback(for question: Question, at index: Int) -> Delegate.AnswerCallback {
+        return { [weak self] answer in
+            self?.answers[question] = answer
+            self?.routeToQuestion(after: index)
         }
     }
 
