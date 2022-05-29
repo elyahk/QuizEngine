@@ -11,47 +11,34 @@ import QuizEngine
 
 @available(*, deprecated)
 class DeprecatedGameTest: XCTestCase {
-    private let router = RouterSpy()
-    private var game: Game<String, String, RouterSpy>!
-
-    override func setUp() {
-        super.setUp()
-
-        game = startGame(questions: ["Q1", "Q2"], router: router, answers: ["Q1": "A1", "Q2": "A2"])
-    }
+    private let delegate = DelegateSpy()
 
     func test_startGame_answerZeroOutOfTwoCorrectly_scoresZero() {
-        router.answerCallback("wrong")
-        router.answerCallback("wrong")
+        Quiz.start(questions: ["Q1", "Q2"], delegate: delegate)
+        delegate.answerCompletion("A1")
+        delegate.answerCompletion("A2")
 
-        XCTAssertEqual(router.routedResult?.score, 0)
+        XCTAssertEqual(delegate.completedQuizzes.count, 1)
+        asswertEqual(delegate.completedQuizzes[0], [("Q1", "A1"), ("Q2", "A2")])
     }
 
-    func test_startGame_answerOneOutOfTwoCorrectly_scoresOne() {
-        router.answerCallback("A1")
-        router.answerCallback("wrong")
-
-        XCTAssertEqual(router.routedResult?.score, 1)
+    private func asswertEqual(_ a1: [(String, String)], _ a2: [(String, String)], file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertTrue(a1.elementsEqual(a2, by: ==))
     }
 
-    func test_startGame_answerTwoOutOfTwoCorrectly_scoresTwo() {
-        router.answerCallback("A1")
-        router.answerCallback("A2")
+    private class DelegateSpy: QuizDelegate {
+        var answerCompletion: ((String) -> Void) = { _ in }
+        var completedQuizzes: [[(question: String, answer: String)]] = []
 
-        XCTAssertEqual(router.routedResult?.score, 2)
-    }
-
-    private class RouterSpy: Router {
-        var answerCallback: ((String) -> Void) = { _ in }
-        var routedResult: Result<String, String>? = nil
-
-        public func routeTo(question: String, answerCallback: @escaping (String) -> Void) {
-            self.answerCallback = answerCallback
+        func answer(for question: String, completion: @escaping AnswerComletion) {
+            self.answerCompletion = completion
         }
 
-        public func routeTo(result: Result<String, String>) {
-            routedResult = result
+        func didCompleteQuiz(withAnswers: [(question: String, answer: String)]) {
+            completedQuizzes.append(withAnswers)
         }
+
+        func handle(result: Result<String, String>) { }
     }
 }
 
