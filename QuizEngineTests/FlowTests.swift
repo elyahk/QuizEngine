@@ -84,7 +84,11 @@ class FlowTests: XCTestCase {
         delegate.answerCompletion("A1")
 
         XCTAssertEqual(delegate.completedQuizzes.count, 1)
-        XCTAssertTrue(delegate.completedQuizzes[0].elementsEqual([("Q1", "A1")], by: ==))
+        asswertEqual(delegate.completedQuizzes[0], [("Q1", "A1")])
+    }
+
+    private func asswertEqual(_ a1: [(String, String)], _ a2: [(String, String)], file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertTrue(a1.elementsEqual(a2, by: ==))
     }
 
     func test_startAndAnswerFirstQuestion_withTwoQuestion_doesNotCompleteQuiz() {
