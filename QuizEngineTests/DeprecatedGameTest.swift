@@ -14,7 +14,7 @@ class DeprecatedGameTest: XCTestCase {
     private let delegate = DelegateSpy()
 
     func test_startGame_answerZeroOutOfTwoCorrectly_scoresZero() {
-        Quiz.start(questions: ["Q1", "Q2"], delegate: delegate)
+        Quiz.start(questions: ["Q1", "Q2"], delegate: delegate, answers: ["Q1": "A1", "Q2": "A2"])
         delegate.answerCompletion("A1")
         delegate.answerCompletion("A2")
 
